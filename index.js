@@ -1,7 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs'); 
-
+const folderName = `./template`;
 
 // var promptData = [];
 // TODO: Create an array of questions for user input
@@ -54,6 +54,18 @@ const questions = [
     },
     {
         type: 'list',
+        name: 'apiBoolean',
+        message: 'Is there any API used for this project?',
+        choices: ['Yes', 'No']
+    },
+    {
+        type: 'list',
+        name: 'testBoolean',
+        message: 'Do you want to include test section for this README.md?',
+        choices: ['Yes', 'No']
+    },
+    {
+        type: 'list',
         name: 'license',
         message: 'Choose your license for this project.',
         choices: ['MIT License: "I want it simple and permissive."', 'GNU GPLv3 License: "I care about sharing improvements."', 'N/A']
@@ -84,25 +96,28 @@ const questions = [
 // TODO: Create a function to write README file
 function writeToFile(data) {
     console.log(data)
-const filename = `README.md`
+const filename = `./template/README.md`
 const readMeTemplate = 
 `# ${data.projectName} ${renderLicenseBadge(data)}
 ## Main Contributor: ${data.name}
-## Project Description
+
+## Table of Contents
+- [Project Description](#project-description)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Project-Description
 - ${data.projectMotiv}
 - ${data.projectWhy}
 - ${data.projectProblem}
 - ${data.projectLearn}
 
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Credits](#credits)
-- [License](#license)
 ## Installation
 ${data.installation}
 ## Usage
-${data.usage}
+${data.usage}\n
 Add your screenshots below to explain the usage of this project.\n`
 
     fs.writeFile(filename, `${readMeTemplate}`, (err) =>
@@ -114,16 +129,25 @@ function appendCredits(data) {
         console.log("skip the credits section because there is no collaobrator");
     } else {
     const creditItems =
-`## Credits
+`## Contributing
 Enter collaborators in this section with the link to their GitHub profiles\n
-- Name, [GitHub](http://github.com)`
+- Name, [GitHub](http://github.com)\n`
 
-        fs.appendFile(`README.md`, creditItems, (err) =>
+        fs.appendFile(`./template/README.md`, creditItems, (err) =>
         err ? console.error(err) : console.log('Successfully committed credit sections.'))
     }}
 
-    // TODO: Create a function that returns a license badge based on which license is passed in
-// If there is no license, return an empty string
+function appendAPI(data) {
+    if (data.apiBoolean === 'No') {
+        console.log("skip the api section because there is no api used in this project")
+    } else {
+        const apiItems = 
+`## API
+List/Enter any API used for this project.\n
+- ______ API`
+    }
+}
+    
 function renderLicenseBadge(data) {
     var licenseMIT = '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)'
     var licenseGNUGPLv3 = '[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)'
@@ -136,8 +160,6 @@ function renderLicenseBadge(data) {
     }
 }
 
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
 function renderLicenseLink(data) {
     var licenseLinkMIT = 'https://opensource.org/licenses/MIT';
     var licenseLinkGNU = 'https://www.gnu.org/licenses/gpl-3.0';
@@ -163,15 +185,25 @@ function renderLicenseName(data) {
 function appendLicense(data) {
     const licenseItems =
 `## License
-### [${renderLicenseName(data)}](${renderLicenseLink(data)})`
-
-        fs.appendFile(`README.md`, licenseItems, (err) =>
+### [${renderLicenseName(data)}](${renderLicenseLink(data)})\n`
+    if (renderLicenseName(data) === "") {
+        return;
+    } else {
+        fs.appendFile(`./template/README.md`, licenseItems, (err) =>
         err ? console.error(err) : console.log('Successfully committed license sections.'))
-    }
+}}
 
-// TODO: Create a function that returns the license section of README
-// If there is no license, return an empty string
-function renderLicenseSection(license) {}
+function appendTest(data) {
+    if (data.testBoolean === 'No') {
+        console.log("skip the test section because user did not want to include test section");
+    } else {
+        const testItems = 
+`## Test
+Go the extra mile and write tests for your application. Then provide examples on how to run them here.`
+        fs.appendFile(`./template/README.md`, testItems, (err) =>
+        err ? console.error(err) : console.log('Successfully committed test section'))
+    }
+}
 
 
 // This is extra function of append to add iterate function of listing the technology list. 
@@ -241,12 +273,21 @@ function renderLicenseSection(license) {}
 
 // TODO: Create a function to initialize app
 function init() {
+    try {
+        if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName);
+        }
+    } catch (err) {
+        console.error(err);
+    }
     inquirer
         .prompt(questions)
         .then((data) => {
             writeToFile(data);
             setTimeout(function() {appendCredits(data)}, 1000);
+            setTimeout(function() {appendAPI(data)}, 1250);
             setTimeout(function() {appendLicense(data)}, 1500);
+            setTimeout(function() {appendTest(data)}, 1750);
             // setTimeout(function() {appendTech(data)}, 2000);
             // setTimeout(function() {appendTechSection()}, 1000);
             // setTimeout(function() {appendMotivation(data)}, 3000);
