@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs'); 
 
+
 // var promptData = [];
 // TODO: Create an array of questions for user input
 const questions = [
@@ -17,24 +18,51 @@ const questions = [
     },
     {
         type: 'input',
-        name: 'projectDescr',
-        message: 'Please describe the project in 2-3 sentences or more.'
+        name: 'projectMotiv',
+        message: 'What was your motivation?'
+    },
+    {
+        type: 'input',
+        name: 'projectWhy',
+        message: 'Why did you build this project?'
+    },
+    {
+        type: 'input',
+        name: 'projectProblem',
+        message: 'What problem does it solve?'
+    },
+    {
+        type: 'input',
+        name: 'projectLearn',
+        message: 'What did you learn?'
+    },
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'What are the steps required to install your project?'
+    },
+    {
+        type: 'input',
+        name: 'usage',
+        message: 'Provide instructions for use. You can later add screenshots to this section'
+    },
+    {
+        type: 'list',
+        name: 'creditBoolean',
+        message: 'Is there any collaborator for this project?',
+        choices: ['Yes', 'No']
+    },
+    {
+        type: 'list',
+        name: 'license',
+        message: 'Choose your license for this project.',
+        choices: ['MIT License: "I want it simple and permissive."', 'GNU GPLv3 License: "I care about sharing improvements."', 'N/A']
     },
     {
         type: 'checkbox',
         name: 'technologyUsed',
         message: 'What technology did you used for this project?',
         choices: ['HTML', 'CSS', 'JavaScript', 'MySQL', 'JQuery', 'Bootstraps', 'Express js', 'Node JS', 'Python', 'Java', 'C', 'C++', 'Golang', 'C#', 'PHP', 'Swift', 'Ruby on Rails', 'Django', 'Angular JS', 'ASP.NET', 'METEOR', 'Laravel', 'Spring', 'PLAY', 'CodeIgniter', 'React' ]
-    },
-    {
-        type: 'input',
-        name: 'motivationOfApp',
-        message: 'What is the motivation of creating this project? Please describe in 2-3 sentences or more.'
-    },
-    {
-        type: 'input',
-        name: 'projectStandsOut',
-        message: 'What makes your project stand out?'
     },
     {
         type: 'input',
@@ -50,7 +78,7 @@ const questions = [
         type: 'input',
         name: 'userEmail',
         message: 'What is your email?'
-    },
+    }
 ];
 
 // TODO: Create a function to write README file
@@ -58,76 +86,157 @@ function writeToFile(data) {
     console.log(data)
 const filename = `README.md`
 const readMeTemplate = 
-    `# ${data.projectName}\n ## Project Description\n### ${data.projectDescr}\n ## Main Contributor: ${data.name}\n`
+`# ${data.projectName} ${renderLicenseBadge(data)}
+## Main Contributor: ${data.name}
+## Project Description
+- ${data.projectMotiv}
+- ${data.projectWhy}
+- ${data.projectProblem}
+- ${data.projectLearn}
+
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Credits](#credits)
+- [License](#license)
+## Installation
+${data.installation}
+## Usage
+${data.usage}
+Add your screenshots below to explain the usage of this project.\n`
 
     fs.writeFile(filename, `${readMeTemplate}`, (err) =>
     err ? console.log(err) : console.log('Success!')
     );
 };
+function appendCredits(data) {
+    if (data.creditBoolean === 'No') {
+        console.log("skip the credits section because there is no collaobrator");
+    } else {
+    const creditItems =
+`## Credits
+Enter collaborators in this section with the link to their GitHub profiles\n
+- Name, [GitHub](http://github.com)`
+
+        fs.appendFile(`README.md`, creditItems, (err) =>
+        err ? console.error(err) : console.log('Successfully committed credit sections.'))
+    }}
+
+    // TODO: Create a function that returns a license badge based on which license is passed in
+// If there is no license, return an empty string
+function renderLicenseBadge(data) {
+    var licenseMIT = '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)'
+    var licenseGNUGPLv3 = '[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)'
+    if (data.license === 'MIT License: "I want it simple and permissive."') {
+        return licenseMIT;
+    } else if (data.license === 'GNU GPLv3 License: "I care about sharing improvements."'){
+        return licenseGNUGPLv3
+    } else if (data.license === "N/A") {
+        return ""
+    }
+}
+
+// TODO: Create a function that returns the license link
+// If there is no license, return an empty string
+function renderLicenseLink(data) {
+    var licenseLinkMIT = 'https://opensource.org/licenses/MIT';
+    var licenseLinkGNU = 'https://www.gnu.org/licenses/gpl-3.0';
+    if (data.license === 'MIT License: "I want it simple and permissive."') {
+        return licenseLinkMIT;
+    } else if (data.license === 'GNU GPLv3 License: "I care about sharing improvements."'){
+        return licenseLinkGNU
+    } else if (data.license === "N/A") {
+        return ""
+    }
+}
+function renderLicenseName(data) {
+    var licenseNameMIT = 'The MIT License';
+    var licenseNameGNU = 'GNU GPL v3';
+    if (data.license === 'MIT License: "I want it simple and permissive."') {
+        return licenseNameMIT;
+    } else if (data.license === 'GNU GPLv3 License: "I care about sharing improvements."'){
+        return licenseNameGNU
+    } else if (data.license === "N/A") {
+        return ""
+    }
+}
+function appendLicense(data) {
+    const licenseItems =
+`## License
+### [${renderLicenseName(data)}](${renderLicenseLink(data)})`
+
+        fs.appendFile(`README.md`, licenseItems, (err) =>
+        err ? console.error(err) : console.log('Successfully committed license sections.'))
+    }
+
+// TODO: Create a function that returns the license section of README
+// If there is no license, return an empty string
+function renderLicenseSection(license) {}
+
 
 // This is extra function of append to add iterate function of listing the technology list. 
-function appendTechSection() {
-    fs.appendFile(`README.md`, `## Technology USED`, (err) =>
-    err ? console.error(err) : console.log('Sucessfully commitited the technology section'))
-}
-function appendTech(data) {
-    var techList = data.technologyUsed;
-    techList = techList.sort();
-    for (var i = 0; i < techList.length; i++) {
-        fs.appendFile('README.md', `- ${techList[i]}\n `, (err) =>
-        err ? console.error(err) : console.log(`Successfully appended!`)
-        )
-    }
-}
+// function appendTechSection() {
+//     fs.appendFile(`README.md`, `## Technology USED`, (err) =>
+//     err ? console.error(err) : console.log('Sucessfully commitited the technology section'))
+// }
+// function appendTech(data) {
+//     var techList = data.technologyUsed;
+//     techList = techList.sort();
+//     for (var i = 0; i < techList.length; i++) {
+//         fs.appendFile('README.md', `- ${techList[i]}\n `, (err) =>
+//         err ? console.error(err) : console.log(`Successfully appended!`)
+//         )
+//     }
+// }
 
-function appendMotivation(data) {
-    if(data.motivationOfApp === "") {
-        console.log("there is no input in motivation of this project")
-    } else {
-    fs.appendFile(`README.md`, `## Motivation\n - ${data.motivationOfApp}\n`, (err) =>
-    err ? console.error(err) : console.log(`Sucessfully commited motivation input`));
-    }};
+// function appendMotivation(data) {
+//     if(data.motivationOfApp === "") {
+//         console.log("there is no input in motivation of this project")
+//     } else {
+//     fs.appendFile(`README.md`, `## Motivation\n - ${data.motivationOfApp}\n`, (err) =>
+//     err ? console.error(err) : console.log(`Sucessfully commited motivation input`));
+//     }};
 
-function appendProjectStands(data) {
-    if(data.projectStandsOut === "") {
-        console.log("there is no input in project stands out description of this project")
-    } else {
-    fs.appendFile(`README.md`, `## Project Stands OUT\n - ${data.projectStandsOut}\n`, (err) =>
-    err ? console.error(err) : console.log(`Sucessfully commited project stands out points`));
-    }};
+// function appendProjectStands(data) {
+//     if(data.projectStandsOut === "") {
+//         console.log("there is no input in project stands out description of this project")
+//     } else {
+//     fs.appendFile(`README.md`, `## Project Stands OUT\n - ${data.projectStandsOut}\n`, (err) =>
+//     err ? console.error(err) : console.log(`Sucessfully commited project stands out points`));
+//     }};
 
-function appendContactMe(data) {
-    if(data.contactNumber === "" && data.gitHubUserName === "" && data.userEmail === "") {
-        console.log("there is no input in any of contact me section of this project")
-    } else {
-    fs.appendFile(`README.md`, `## Contact Me\n`, (err) =>
-    err ? console.error(err) : console.log(`Sucessfully commited contact me section`));
-    }};
-function appendContactNumber(data) {
-    if (data.contactNumber === "") {
-        console.log('there is no input in contact number.')
-    } else {
-        fs.appendFile(`README.md`, `- ${data.contactNumber}\n`, (err) =>
-        err ? console.error(err) : console.log(`Successfully committed contact number.`))
-    }
-}
+// function appendContactMe(data) {
+//     if(data.contactNumber === "" && data.gitHubUserName === "" && data.userEmail === "") {
+//         console.log("there is no input in any of contact me section of this project")
+//     } else {
+//     fs.appendFile(`README.md`, `## Contact Me\n`, (err) =>
+//     err ? console.error(err) : console.log(`Sucessfully commited contact me section`));
+//     }};
+// function appendContactNumber(data) {
+//     if (data.contactNumber === "") {
+//         console.log('there is no input in contact number.')
+//     } else {
+//         fs.appendFile(`README.md`, `- ${data.contactNumber}\n`, (err) =>
+//         err ? console.error(err) : console.log(`Successfully committed contact number.`))
+//     }
+// }
 
-function appendGitHub(data) {
-    if (data.gitHubUserName === "") {
-        console.log('there is no input in github username');
-    } else {
-        fs.appendFile(`README.md`, `- ${data.gitHubUserName}\n`, (err) =>
-        err ? console.error(err) : console.log(`Successfully committed github username.`))
-    }
-}
-function appendEmail(data) {
-    if (data.userEmail === "") {
-        console.log('there is no input in email');
-    } else {
-        fs.appendFile(`README.md`, `- ${data.userEmail}\n`, (err) =>
-        err ? console.error(err) : console.log(`Successfully committed email.`))
-    }
-}
+// function appendGitHub(data) {
+//     if (data.gitHubUserName === "") {
+//         console.log('there is no input in github username');
+//     } else {
+//         fs.appendFile(`README.md`, `- ${data.gitHubUserName}\n`, (err) =>
+//         err ? console.error(err) : console.log(`Successfully committed github username.`))
+//     }
+// }
+// function appendEmail(data) {
+//     if (data.userEmail === "") {
+//         console.log('there is no input in email');
+//     } else {
+//         fs.appendFile(`README.md`, `- ${data.userEmail}\n`, (err) =>
+//         err ? console.error(err) : console.log(`Successfully committed email.`))
+//     }
+// }
 
 
 // TODO: Create a function to initialize app
@@ -136,16 +245,40 @@ function init() {
         .prompt(questions)
         .then((data) => {
             writeToFile(data);
-            setTimeout(function() {appendTech(data)}, 2000);
-            setTimeout(function() {appendTechSection()}, 1000);
-            setTimeout(function() {appendMotivation(data)}, 3000);
-            setTimeout(function() {appendProjectStands(data)}, 4000);
-            setTimeout(function() {appendContactMe(data)}, 5000);
-            setTimeout(function() {appendContactNumber(data)}, 6000);
-            setTimeout(function() {appendGitHub(data)}, 7000);
-            setTimeout(function() {appendEmail(data)}, 8000);
+            setTimeout(function() {appendCredits(data)}, 1000);
+            setTimeout(function() {appendLicense(data)}, 1500);
+            // setTimeout(function() {appendTech(data)}, 2000);
+            // setTimeout(function() {appendTechSection()}, 1000);
+            // setTimeout(function() {appendMotivation(data)}, 3000);
+            // setTimeout(function() {appendProjectStands(data)}, 4000);
+            // setTimeout(function() {appendContactMe(data)}, 5000);
+            // setTimeout(function() {appendContactNumber(data)}, 6000);
+            // setTimeout(function() {appendGitHub(data)}, 7000);
+            // setTimeout(function() {appendEmail(data)}, 8000);
         });
 }
 
 // Function call to initialize app
 init();
+
+
+// // TODO: Create a function that returns a license badge based on which license is passed in
+// // If there is no license, return an empty string
+// function renderLicenseBadge(license) {}
+
+// // TODO: Create a function that returns the license link
+// // If there is no license, return an empty string
+// function renderLicenseLink(license) {}
+
+// // TODO: Create a function that returns the license section of README
+// // If there is no license, return an empty string
+// function renderLicenseSection(license) {}
+
+// // TODO: Create a function to generate markdown for README
+// function generateMarkdown(data) {
+//   return `# ${data.title}
+
+// `;
+// }
+
+// module.exports = generateMarkdown;

@@ -1,17 +1,21 @@
-# README generator
- ## Project Description
-### this is the project that helsp user to create REAdME file by inputing the information of the project
- ## Main Contributor: Richard You
-## Technology USED- CSS
- - JavaScript
- - HTML
- - Node JS
- - Express js
- ## Motivation
- - The motivation of creating this project is to help user to create readme file efficiently and quickly for each project
-## Project Stands OUT
- - this creates automatically creates readme file, and if the information ins not inputted it skipped into next sectino 
-## Contact Me
-- ### # ## ####
-- mygitHubusername
-- richardyou94@gmail.com
+# Testing Project for README generator [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+## Main Contributor: Richard You
+## Project Description
+- homework
+- homework
+- lalala
+- blah blah
+
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Credits](#credits)
+- [License](#license)
+## Installation
+npm i
+## Usage
+yes
+Add your screenshots below to explain the usage of this project.
+## Credits
+Enter collaborators in this section with the link to their GitHub profiles
+Name, [GitHub](http://github.com)
