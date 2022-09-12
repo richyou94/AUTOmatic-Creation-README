@@ -1,0 +1,20 @@
+{
+  "name": "automatic-creation-readme",
+  "version": "1.0.0",
+  "description": "This is the automatically creating the readme.md file when we give input information to the node js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YichanYouRichard/AUTOmatic-Creation-README.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/YichanYouRichard/AUTOmatic-Creation-README#readme",
+  "dependencies": {
+    "inquirer": "8.2.4"
+  }
+}
