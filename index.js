@@ -3,7 +3,6 @@ const inquirer = require('inquirer');
 const fs = require('fs'); 
 const folderName = `./template`;
 
-// var promptData = [];
 // TODO: Create an array of questions for user input
 const questions = [
     {
@@ -90,6 +89,11 @@ const questions = [
         type: 'input',
         name: 'userEmail',
         message: 'What is your email?'
+    },
+    {
+        type: 'input',
+        name: 'lastComment',
+        message: 'Do you have anything to say in the end of README.md file?'
     }
 ];
 
@@ -107,18 +111,22 @@ const readMeTemplate =
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
+- [Test](#test) (optional)
+- [Question](#question)
+- [Technology](#technology)
+- [Final-Comment](#final-comment)
 
 ## Project-Description
-- ${data.projectMotiv}
-- ${data.projectWhy}
-- ${data.projectProblem}
-- ${data.projectLearn}
+- Project Motivation: ${data.projectMotiv}
+- Why?: ${data.projectWhy}
+- Problems that were solved...: ${data.projectProblem}
+- What I learn...:${data.projectLearn}
 
 ## Installation
 ${data.installation}
 ## Usage
 ${data.usage}\n
-Add your screenshots below to explain the usage of this project.\n`
+### Add your screenshots below to explain the usage of this project.\n`
 
     fs.writeFile(filename, `${readMeTemplate}`, (err) =>
     err ? console.log(err) : console.log('Success!')
@@ -134,7 +142,7 @@ Enter collaborators in this section with the link to their GitHub profiles\n
 - Name, [GitHub](http://github.com)\n`
 
         fs.appendFile(`./template/README.md`, creditItems, (err) =>
-        err ? console.error(err) : console.log('Successfully committed credit sections.'))
+        err ? console.error(err) : console.log('Successfully committed credit section.'))
     }}
 
 function appendAPI(data) {
@@ -199,76 +207,50 @@ function appendTest(data) {
     } else {
         const testItems = 
 `## Test
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.`
+Go the extra mile and write tests for your application. Then provide examples on how to run them here.\n`
         fs.appendFile(`./template/README.md`, testItems, (err) =>
         err ? console.error(err) : console.log('Successfully committed test section'))
     }
 }
+function appendQuestion(data) {
+    const githubLink = `http://github.com/${data.gitHubUserName}`
+    const questionItems = 
+`## Question
+Please ask any questions using the contact information below\n
+- Contact Number: ${data.contactNumber}\n
+- GitHub Username: [${data.gitHubUserName}](${githubLink})\n
+- Contact Email: ${data.userEmail}\n`
 
+    fs.appendFile(`./template/README.md`, questionItems, (err) =>
+    err ? console.error(err) : console.log(`Successfully committed the question section.`))
+}
 
-// This is extra function of append to add iterate function of listing the technology list. 
-// function appendTechSection() {
-//     fs.appendFile(`README.md`, `## Technology USED`, (err) =>
-//     err ? console.error(err) : console.log('Sucessfully commitited the technology section'))
-// }
-// function appendTech(data) {
-//     var techList = data.technologyUsed;
-//     techList = techList.sort();
-//     for (var i = 0; i < techList.length; i++) {
-//         fs.appendFile('README.md', `- ${techList[i]}\n `, (err) =>
-//         err ? console.error(err) : console.log(`Successfully appended!`)
-//         )
-//     }
-// }
+function appendTechSection() {
+    fs.appendFile(`./template/README.md`, `## Technology\n`, (err) =>
+    err ? console.error(err) : console.log('Sucessfully commitited the technology section'))
+}
 
-// function appendMotivation(data) {
-//     if(data.motivationOfApp === "") {
-//         console.log("there is no input in motivation of this project")
-//     } else {
-//     fs.appendFile(`README.md`, `## Motivation\n - ${data.motivationOfApp}\n`, (err) =>
-//     err ? console.error(err) : console.log(`Sucessfully commited motivation input`));
-//     }};
+function appendTech(data) {
+    var techList = data.technologyUsed;
+    techList = techList.sort();
+    for (var i = 0; i < techList.length; i++) {
+        fs.appendFile('./template/README.md', `- ${techList[i]}\n `, (err) =>
+        err ? console.error(err) : console.log(`Successfully appended!`)
+        )
+    }
+}
+function appendLastComment(data) {
+    const lastCommentItems = 
+`## Final-Comment\n
+${data.lastComment}`
+if (data.lastComment === "") {
+    return;
+} else {
+    fs.appendFile(`./template/README.md`, lastCommentItems, (err) =>
+    err ? console.error(err) : console.log(`Successfully committed developer's comment section.`))
+}
+}
 
-// function appendProjectStands(data) {
-//     if(data.projectStandsOut === "") {
-//         console.log("there is no input in project stands out description of this project")
-//     } else {
-//     fs.appendFile(`README.md`, `## Project Stands OUT\n - ${data.projectStandsOut}\n`, (err) =>
-//     err ? console.error(err) : console.log(`Sucessfully commited project stands out points`));
-//     }};
-
-// function appendContactMe(data) {
-//     if(data.contactNumber === "" && data.gitHubUserName === "" && data.userEmail === "") {
-//         console.log("there is no input in any of contact me section of this project")
-//     } else {
-//     fs.appendFile(`README.md`, `## Contact Me\n`, (err) =>
-//     err ? console.error(err) : console.log(`Sucessfully commited contact me section`));
-//     }};
-// function appendContactNumber(data) {
-//     if (data.contactNumber === "") {
-//         console.log('there is no input in contact number.')
-//     } else {
-//         fs.appendFile(`README.md`, `- ${data.contactNumber}\n`, (err) =>
-//         err ? console.error(err) : console.log(`Successfully committed contact number.`))
-//     }
-// }
-
-// function appendGitHub(data) {
-//     if (data.gitHubUserName === "") {
-//         console.log('there is no input in github username');
-//     } else {
-//         fs.appendFile(`README.md`, `- ${data.gitHubUserName}\n`, (err) =>
-//         err ? console.error(err) : console.log(`Successfully committed github username.`))
-//     }
-// }
-// function appendEmail(data) {
-//     if (data.userEmail === "") {
-//         console.log('there is no input in email');
-//     } else {
-//         fs.appendFile(`README.md`, `- ${data.userEmail}\n`, (err) =>
-//         err ? console.error(err) : console.log(`Successfully committed email.`))
-//     }
-// }
 
 
 // TODO: Create a function to initialize app
@@ -288,38 +270,12 @@ function init() {
             setTimeout(function() {appendAPI(data)}, 1250);
             setTimeout(function() {appendLicense(data)}, 1500);
             setTimeout(function() {appendTest(data)}, 1750);
-            // setTimeout(function() {appendTech(data)}, 2000);
-            // setTimeout(function() {appendTechSection()}, 1000);
-            // setTimeout(function() {appendMotivation(data)}, 3000);
-            // setTimeout(function() {appendProjectStands(data)}, 4000);
-            // setTimeout(function() {appendContactMe(data)}, 5000);
-            // setTimeout(function() {appendContactNumber(data)}, 6000);
-            // setTimeout(function() {appendGitHub(data)}, 7000);
-            // setTimeout(function() {appendEmail(data)}, 8000);
+            setTimeout(function() {appendQuestion(data)}, 2000);
+            setTimeout(function() {appendTechSection(data)}, 2250);
+            setTimeout(function() {appendTech(data)}, 2500);
+            setTimeout(function() {appendLastComment(data)}, 2750);
         });
 }
 
 // Function call to initialize app
 init();
-
-
-// // TODO: Create a function that returns a license badge based on which license is passed in
-// // If there is no license, return an empty string
-// function renderLicenseBadge(license) {}
-
-// // TODO: Create a function that returns the license link
-// // If there is no license, return an empty string
-// function renderLicenseLink(license) {}
-
-// // TODO: Create a function that returns the license section of README
-// // If there is no license, return an empty string
-// function renderLicenseSection(license) {}
-
-// // TODO: Create a function to generate markdown for README
-// function generateMarkdown(data) {
-//   return `# ${data.title}
-
-// `;
-// }
-
-// module.exports = generateMarkdown;
