@@ -98,6 +98,7 @@ const questions = [
 ];
 
 // TODO: Create a function to write README file
+// This function writes initial files of readme.md
 function writeToFile(data) {
     console.log(data)
 const filename = `./template/README.md`
@@ -132,6 +133,7 @@ ${data.usage}\n
     err ? console.log(err) : console.log('Success!')
     );
 };
+//This function append the files with the credits section
 function appendCredits(data) {
     if (data.creditBoolean === 'No') {
         console.log("skip the credits section because there is no collaobrator");
@@ -144,7 +146,7 @@ Enter collaborators in this section with the link to their GitHub profiles\n
         fs.appendFile(`./template/README.md`, creditItems, (err) =>
         err ? console.error(err) : console.log('Successfully committed credit section.'))
     }}
-
+//This function append the files with the api section
 function appendAPI(data) {
     if (data.apiBoolean === 'No') {
         console.log("skip the api section because there is no api used in this project")
@@ -155,7 +157,7 @@ List/Enter any API used for this project.\n
 - ______ API`
     }
 }
-    
+// This function returns the value with the badges image link    
 function renderLicenseBadge(data) {
     var licenseMIT = '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)'
     var licenseGNUGPLv3 = '[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)'
@@ -167,7 +169,7 @@ function renderLicenseBadge(data) {
         return ""
     }
 }
-
+// This function returns the value with the license link
 function renderLicenseLink(data) {
     var licenseLinkMIT = 'https://opensource.org/licenses/MIT';
     var licenseLinkGNU = 'https://www.gnu.org/licenses/gpl-3.0';
@@ -179,6 +181,7 @@ function renderLicenseLink(data) {
         return ""
     }
 }
+// This function returns the value with the license name
 function renderLicenseName(data) {
     var licenseNameMIT = 'The MIT License';
     var licenseNameGNU = 'GNU GPL v3';
@@ -190,6 +193,8 @@ function renderLicenseName(data) {
         return ""
     }
 }
+
+// This function append the files with the license section
 function appendLicense(data) {
     const licenseItems =
 `## License
@@ -200,7 +205,7 @@ function appendLicense(data) {
         fs.appendFile(`./template/README.md`, licenseItems, (err) =>
         err ? console.error(err) : console.log('Successfully committed license sections.'))
 }}
-
+// This function append the files with the test section
 function appendTest(data) {
     if (data.testBoolean === 'No') {
         console.log("skip the test section because user did not want to include test section");
@@ -212,6 +217,7 @@ Go the extra mile and write tests for your application. Then provide examples on
         err ? console.error(err) : console.log('Successfully committed test section'))
     }
 }
+// This function append the files with the question section
 function appendQuestion(data) {
     const githubLink = `http://github.com/${data.gitHubUserName}`
     const questionItems = 
@@ -224,12 +230,12 @@ Please ask any questions using the contact information below\n
     fs.appendFile(`./template/README.md`, questionItems, (err) =>
     err ? console.error(err) : console.log(`Successfully committed the question section.`))
 }
-
+// This function append the files with the technology section (just the title)
 function appendTechSection() {
     fs.appendFile(`./template/README.md`, `## Technology\n`, (err) =>
     err ? console.error(err) : console.log('Sucessfully commitited the technology section'))
 }
-
+// This function append the files with the technology section (with lists)
 function appendTech(data) {
     var techList = data.technologyUsed;
     techList = techList.sort();
@@ -239,6 +245,7 @@ function appendTech(data) {
         )
     }
 }
+// This function append the files with the final comment section
 function appendLastComment(data) {
     const lastCommentItems = 
 `## Final-Comment\n
